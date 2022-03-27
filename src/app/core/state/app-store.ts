@@ -1,5 +1,5 @@
 import { BehaviorSubject, Observable } from 'rxjs';
-import { distinctUntilChanged, pluck } from 'rxjs/operators';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 
 import { State, INITIAL_STATE, StateKey } from './app-state';
 import { Injectable } from "@angular/core";
@@ -13,9 +13,9 @@ export class Store {
         return this.subj.value;
     }
 
-    public select<T>(name: StateKey): Observable<T> {
+    public select<T extends any>(name: StateKey): Observable<T> {
         return this.subj.pipe(
-            pluck<State, T>(name),
+            map((state: State) => <T> state[name]),
             distinctUntilChanged<T>()
         );
     }
