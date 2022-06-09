@@ -7,11 +7,12 @@ import { NavigationService } from 'src/app/core/services';
 import { BacklogService } from '../../services/backlog.service';
 import { PtItem } from 'src/app/core/models/domain';
 import { PresetType } from 'src/app/core/models/domain/types';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+//import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PtNewItem } from 'src/app/shared/models/dto';
 import { EMPTY_STRING } from 'src/app/core/helpers';
 import { ItemType } from 'src/app/core/constants';
 import { Store } from 'src/app/core/state/app-store';
+import { ModalService } from 'src/app/shared/services/modal.service';
 
 @Component({
     selector: 'app-backlog',
@@ -30,7 +31,8 @@ export class BacklogPageComponent implements OnInit {
         private activatedRoute: ActivatedRoute,
         private navigationService: NavigationService,
         private backlogService: BacklogService,
-        private modalService: NgbModal,
+        //private modalService: NgbModal,
+        private modalService: ModalService,
         private store: Store
     ) { }
 
@@ -63,7 +65,9 @@ export class BacklogPageComponent implements OnInit {
         this.navigationService.navigate(['/detail', item.id]);
     }
 
-    public onAddTap(content: any) {
+    public onAddTap(id: string) {
+        this.openModal(id);
+        /*
         this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
             if (typeof result === 'object') {
                 if (this.store.value.currentUser) {
@@ -77,5 +81,27 @@ export class BacklogPageComponent implements OnInit {
         }, (reason) => {
 
         });
+        */
+    }
+
+    onSaveTap(newItem: PtNewItem, id: string) {
+        if (typeof newItem === 'object') {
+            if (this.store.value.currentUser) {
+                this.backlogService.addNewPtItem(newItem, this.store.value.currentUser)
+                    .then(nextItem => {
+                        this.items$.next([nextItem, ...this.items$.value]);
+                    });
+            }
+            this.closeModal(id);
+        }
+    }
+
+    openModal(id: string) {
+        this.modalService.open(id);
+    }
+    
+    closeModal(id: string) {
+        this.modalService.close(id);
+        this.resetModalFields();
     }
 }
