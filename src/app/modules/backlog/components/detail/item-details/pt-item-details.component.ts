@@ -8,11 +8,11 @@ import { ItemType, PT_ITEM_STATUSES, PT_ITEM_PRIORITIES } from 'src/app/core/con
 import { Observable } from 'rxjs';
 import { Store } from 'src/app/core/state/app-store';
 import { ModalService } from 'src/app/shared/services/modal.service';
-// import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'app-item-details',
     templateUrl: 'pt-item-details.component.html',
+    styleUrls: ['pt-item-details.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PtItemDetailsComponent implements OnInit {
@@ -36,7 +36,6 @@ export class PtItemDetailsComponent implements OnInit {
 
     constructor(
         private store: Store,
-        // private modalService: NgbModal,
         private modalService: ModalService,
     ) { }
 
@@ -60,17 +59,6 @@ export class PtItemDetailsComponent implements OnInit {
     public assigneePickerOpen(id: string) {
         this.usersRequested.emit();
         this.openModal(id);
-        /*
-        this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-            if (typeof result === 'object' && this.itemForm) {
-                this.selectedAssignee = result;
-                this.itemForm.assigneeName = (result as PtUser).fullName;
-                this.notifyUpdateItem();
-            }
-        }, (reason) => {
-
-        });
-        */
     }
 
     public selectUser(selectedUser: PtUser, id: string) {
